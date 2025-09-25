@@ -22,16 +22,13 @@ handlers:
 - url: /favicon\.ico
   static_files: dist/favicon.ico
   upload: dist/favicon\.ico
-  login: admin
   secure: always
 - url: /(.*\.(js|css|png|ico))$
   static_files: dist/\1
   upload: dist/(.*\.(js|css|png|ico))$
-  login: admin
   secure: always
 # URLs without extension (including '/') are interpreted as SPA Routing targets.
 - url: /(.*)$
   static_files: dist/index.html
   upload: dist/index.html
-  login: admin
   secure: always
