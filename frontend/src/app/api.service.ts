@@ -23,7 +23,33 @@ export class ApiService {
     headers: {}
   };
 
-  constructor(protected http: HttpClient) { }
+  constructor(protected http: HttpClient) {
+    this.initializeApiKey();
+  }
+
+  /**
+   * Initialize the x-api-key header from cookie if it exists
+   */
+  private initializeApiKey() {
+    const apiKey = this.getApiKeyFromCookie();
+    if (apiKey) {
+      this.options.headers['x-api-key'] = apiKey;
+    }
+  }
+
+  /**
+   * Read the x-api-key from cookies
+   */
+  private getApiKeyFromCookie(): string | null {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'x-api-key') {
+        return decodeURIComponent(value);
+      }
+    }
+    return null;
+  }
 
   // Trick for detection of api domain
   protected getHost() {
