@@ -53,8 +53,23 @@ export class ApiService {
 
   // Trick for detection of api domain
   protected getHost() {
-    const h = window.location.hostname;
+    const hostCookie = this.getHostFromCookie();
+    const h = hostCookie || window.location.hostname;
     return h === 'localhost' ? `http://${h}:8080/api` : `https://${h}/api`;
+  }
+
+  /**
+   * Read the host from cookies
+   */
+  private getHostFromCookie(): string | null {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'host') {
+        return decodeURIComponent(value);
+      }
+    }
+    return null;
   }
 
   protected handleError(error: any): Promise<any> {
