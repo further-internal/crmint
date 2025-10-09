@@ -15,7 +15,7 @@
 import { Component } from '@angular/core';
 
 import { environment } from 'environments/environment';
-import { version } from '../../package.json';
+const packageJson = require('../../package.json');
 
 @Component({
   selector: 'app-root',
@@ -24,7 +24,7 @@ import { version } from '../../package.json';
 })
 export class AppComponent {
   title = `${environment.app_title}`;
-  version = version;
+  version = packageJson.version;
 
   alerts = [
     // Example

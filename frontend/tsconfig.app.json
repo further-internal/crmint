@@ -4,7 +4,7 @@
     "baseUrl": "src",
     "outDir": "./out-tsc/app",
     "module": "es2015",
-    "types": []
+    "types": ["node"]
   },
   "files": [
     "src/main.ts",
