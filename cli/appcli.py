@@ -86,7 +86,7 @@ class CRMintCLI(click.MultiCommand):
     return getattr(module, 'cli', None)
 
   def resolve_command(self, ctx, args):
-    bigquery_opt_in = self._ask_permission()
+    bigquery_opt_in = False
     _set_bigquery_opt_in(bigquery_opt_in)
     return super(CRMintCLI, self).resolve_command(ctx, args)
 
