@@ -885,8 +885,7 @@ def _inject_vpc_connector_config(workdir: str,
               f'/connectors/{connector}')
   # Connector object with required configurations
   connector_config = {
-      'vpc_access_connector': {'name': vpc_name, 'egress_setting': 'private-ranges-only'},
-      'network': {'ingress_settings': 'internal-and-cloud-load-balancing'}
+      'vpc_access_connector': {'name': vpc_name}
   }
   config_filepath = os.path.join(workdir, config_file)
   try:
@@ -1044,6 +1043,23 @@ def deploy_dispatch_rules(stage, debug=False):
   shared.execute_command(
       'Deploy dispatch rules',
       cmd, cwd=cmd_workdir, debug=debug)
+
+
+def configure_appengine_ingress(stage, debug=False):
+  """Configure App Engine ingress settings for all services."""
+  project_id = stage.project_id
+  services = ['default', 'controller', 'jobs']
+  
+  for idx, service in enumerate(services):
+    cmd = textwrap.dedent(f"""\
+        {GCLOUD} app services update {service} \\
+            --ingress=internal-and-cloud-load-balancing \\
+            --project={project_id}
+        """)
+    shared.execute_command(
+        f'Configure App Engine ingress settings for {service} ({idx + 1}/{len(services)})',
+        cmd,
+        debug=debug)
 
 
 def _download_cloud_sql_proxy(stage, debug=False):
@@ -1344,6 +1360,7 @@ def deploy(stage_path: Union[None, str],
     components.append(deploy_jobs)
   if dispatch_rules:
     components.append(deploy_dispatch_rules)
+    components.append(configure_appengine_ingress)
 
   # Displays the frontend url to improve the user experience.
   components.append(display_appengine_url)
