@@ -885,7 +885,8 @@ def _inject_vpc_connector_config(workdir: str,
               f'/connectors/{connector}')
   # Connector object with required configurations
   connector_config = {
-      'vpc_access_connector': {'name': vpc_name},
+      'vpc_access_connector': {'name': vpc_name, 'egress_setting': 'private-ranges-only'},
+      'network': {'ingress_settings': 'internal-and-cloud-load-balancing'}
   }
   config_filepath = os.path.join(workdir, config_file)
   try:
