@@ -184,7 +184,7 @@ function run_command_line() {
 # Main script execution
 parse_command_line_arguments "$@"
 ensure_gcloud_project_set
-ensure_gcloud_auth
+# ensure_gcloud_auth
 clone_and_checkout_repository
 install_command_line
 add_wrapper_function_to_bashrc
