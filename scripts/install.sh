@@ -117,24 +117,24 @@ function install_command_line() {
     rm -rf .venv
   fi
 
-  # Install Python 3.12 and its venv module
-  echo "Installing Python 3.12 and necessary packages..."
+  # Install Python 3.10 and its venv module
+  echo "Installing Python 3.10 and necessary packages..."
   sudo apt-get update
   sudo apt-get install -y software-properties-common
   sudo add-apt-repository ppa:deadsnakes/ppa -y &> /dev/null
   sudo apt-get update -qq
-  sudo apt-get install -y -qq python3.12 python3.12-venv python3.12-dev
+  sudo apt-get install -y -qq python3.10 python3.10-venv python3.10-dev
 
-  # Verify Python 3.12 installation
-  if ! command -v python3.12 &> /dev/null; then
-    echo "Python 3.12 installation failed, exiting."
+  # Verify Python 3.10 installation
+  if ! command -v python3.10 &> /dev/null; then
+    echo "Python 3.10 installation failed, exiting."
     exit 1
   fi
-  echo "Python 3.12 version: $(python3.12 --version)"
+  echo "Python 3.10 version: $(python3.10 --version)"
 
-  # Create virtual environment using Python 3.12
-  echo "Creating virtual environment with Python 3.12..."
-  python3.12 -m venv .venv
+  # Create virtual environment using Python 3.10
+  echo "Creating virtual environment with Python 3.10..."
+  python3.10 -m venv .venv
 
   # Activate the virtual environment
   echo "Activating virtual environment..."
