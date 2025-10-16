@@ -1048,7 +1048,7 @@ def deploy_dispatch_rules(stage, debug=False):
 def configure_appengine_ingress(stage, debug=False):
   """Configure App Engine ingress settings for all services."""
   project_id = stage.project_id
-  services = ['default', 'crmint-controller', 'crmint-jobs']
+  services = ['default']
   
   for idx, service in enumerate(services):
     cmd = textwrap.dedent(f"""\
