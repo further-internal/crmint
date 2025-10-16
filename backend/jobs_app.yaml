@@ -19,10 +19,12 @@ automatic_scaling:
   max_instances: 4
   target_cpu_utilization: 0.7
   target_throughput_utilization: 0.7
-  max_concurrent_requests: 20
+  max_concurrent_requests: 10
 
 runtime: python310
-entrypoint: gunicorn -b :$PORT -w 4 -k gthread --threads 4 --timeout 600 jobs_app:app
+# Optimized for memory: 2 workers + 2 threads = 4 concurrent requests per instance
+# Each worker uses ~400-500MB, leaving headroom for job processing
+entrypoint: gunicorn -b :$PORT -w 2 -k gthread --threads 2 --timeout 600 --max-requests 1000 --max-requests-jitter 50 jobs_app:app
 
 handlers:
 - url: /.*
