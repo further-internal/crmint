@@ -35,9 +35,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Click==8.0.4',
-        'pyyaml==6.0',
-        'requests==2.24.0',
+        'Click==7.1.2',
+        'pyyaml==6.0.2',
+        'requests==2.32.5',
     ],
     tests_require=test_deps,
     extras_require=extras,
