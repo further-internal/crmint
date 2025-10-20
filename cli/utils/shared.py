@@ -258,9 +258,20 @@ def get_regions(project_id: ProjectId) -> Tuple[str, str]:
   if status == 0:  # App Engine app had already been deployed in some region.
     region = out.strip().split()[1]
   else:  # Get the list of available App Engine regions and prompt user.
-    @click.echo('     No App Engine app has been deployed yet.')
-    @click.echo('     SETTING TO us-central1')
+    click.echo('     No App Engine app has been deployed yet.')
+    click.echo('     SETTING TO us-central1')
     region = "us-central"
+    # cmd = f'{GCLOUD} app regions list --format="value(region)"'
+    # _, out, _ = execute_command(
+    #     'Get available App Engine regions', cmd, debug_uses_std_out=False)
+    # regions = out.strip().split('\n')
+    # for i, region in enumerate(regions):
+    #   click.echo(f'{i + 1}) {region}')
+    # i = -1
+    # while i < 0 or i >= len(regions):
+    #   i = click.prompt(
+    #       'Enter an index of the region to deploy CRMint in', type=int) - 1
+    # region = regions[i].strip()
   sql_region = region if region[-1].isdigit() else f'{region}1'
   return region, sql_region
 
