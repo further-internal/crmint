@@ -260,7 +260,7 @@ def get_regions(project_id: ProjectId) -> Tuple[str, str]:
   else:  # Get the list of available App Engine regions and prompt user.
     @click.echo('     No App Engine app has been deployed yet.')
     @click.echo('     SETTING TO us-central1')
-    region = "us-central1"
+    region = "us-central"
   sql_region = region if region[-1].isdigit() else f'{region}1'
   return region, sql_region
 
