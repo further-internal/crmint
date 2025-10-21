@@ -933,22 +933,18 @@ def deploy_frontend(stage, debug=False):
   cmds = [
       # CloudShell node version is too old for Angular, let's update it.
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm install 22.10.0
+          nvm install 22.10.0
           """),
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm use 22.10.0 \\
+          nvm use 22.10.0 \\
           && npm install -g npm@latest
           """),
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm use 22.10.0 \\
+          nvm use 22.10.0 \\
           && npm install
           """),
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm use 22.10.0 \\
+          nvm use 22.10.0 \\
           && npm run build -- -c production
           """),
   ]
