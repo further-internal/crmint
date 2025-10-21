@@ -130,10 +130,11 @@ def check_if_user_is_owner(user_email: str,
     """
     project_number = get_project_number(stage, debug=debug)
     # Command to check direct user role
+    # HACK: BUSER HAD TO CHANGE users:{user_email} to serviceAccount:{user_email}
     user_cmd = textwrap.dedent(f"""\
         {GCLOUD} projects get-iam-policy {project_number} \\
             --flatten="bindings[].members" \\
-            --filter="bindings.members=user:{user_email}" \\
+            --filter="bindings.members=serviceAccount:{user_email}" \\
             --format="value(bindings.role)"
         """)
     
