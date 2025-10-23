@@ -1073,6 +1073,8 @@ def _download_cloud_sql_proxy(stage, debug=False):
       cmd = f'curl -L {url} -o {cloud_sql_proxy_path}'
       shared.execute_command('Downloading Cloud SQL proxy', cmd, debug=debug)
     os.environ['CLOUD_SQL_PROXY'] = cloud_sql_proxy_path
+  chmod_cmd = f'chmod +x {cloud_sql_proxy_path}'
+  shared.execute_command('Allowing execution of Cloud SQL proxy', chmod_cmd, debug=debug)
 
 
 def _start_cloud_sql_proxy(stage, debug=False):
@@ -1082,7 +1084,7 @@ def _start_cloud_sql_proxy(stage, debug=False):
   cmds = [
       (f'mkdir -p {cloudsql_dir}'.format(), False),
       ('echo "CLOUD_SQL_PROXY=$CLOUD_SQL_PROXY"', False),
-      ('chmod +x $CLOUD_SQL_PROXY'),
+      # ('chmod +x $CLOUD_SQL_PROXY'),
       (
           f' $CLOUD_SQL_PROXY -projects={project_id}'
           f' -instances={db_instance_conn_name}'
