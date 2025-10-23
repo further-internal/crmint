@@ -1088,7 +1088,7 @@ def _start_cloud_sql_proxy(stage, debug=False):
           f' -dir={cloudsql_dir} 2>/dev/null &',
           True,
       ),
-      # ('sleep 5', False), # Wait for cloud_sql_proxy to start.
+      ('sleep 10', False), # Wait for cloud_sql_proxy to start.
   ]
   total = len(cmds)
   for i, (cmd, force_std_out) in enumerate(cmds):
