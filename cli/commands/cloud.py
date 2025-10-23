@@ -1082,6 +1082,7 @@ def _start_cloud_sql_proxy(stage, debug=False):
   cmds = [
       (f'mkdir -p {cloudsql_dir}'.format(), False),
       ('echo "CLOUD_SQL_PROXY=$CLOUD_SQL_PROXY"', False),
+      ('chmod +x $CLOUD_SQL_PROXY'),
       (
           f' $CLOUD_SQL_PROXY -projects={project_id}'
           f' -instances={db_instance_conn_name}'
