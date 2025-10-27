@@ -21,17 +21,17 @@ touch ~/.cloudshell/no-apt-get-warning
 
 # Function to ensure gcloud authentication
 function ensure_gcloud_auth() {
-  # Get the list of accounts and select the first one if multiple accounts exist
-  ACTIVE_ACCOUNT=$(gcloud auth list --format="value(account)" | head -n 1)
+  # Get the currently ACTIVE account. This is the correct command.
+  ACTIVE_ACCOUNT=$(gcloud config get-value account 2>/dev/null)
 
   if [ -z "$ACTIVE_ACCOUNT" ]; then
-    echo "No active Google Cloud account is selected."
-    echo "Please authenticate with your Google Cloud account to continue."
-    gcloud auth login
+    echo "No active Google Cloud account is set. Please log in."
+    gcloud auth login --quiet
     if [ $? -ne 0 ]; then
       echo "Authentication failed, exiting."
       exit 1
     fi
+    echo "Login successful."
   else
     echo "Active Google Cloud account is set to $ACTIVE_ACCOUNT"
   fi
@@ -184,7 +184,7 @@ function run_command_line() {
 # Main script execution
 parse_command_line_arguments "$@"
 ensure_gcloud_project_set
-ensure_gcloud_auth
+# ensure_gcloud_auth
 clone_and_checkout_repository
 install_command_line
 add_wrapper_function_to_bashrc

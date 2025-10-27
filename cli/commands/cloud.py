@@ -130,10 +130,11 @@ def check_if_user_is_owner(user_email: str,
     """
     project_number = get_project_number(stage, debug=debug)
     # Command to check direct user role
+    # HACK: BUSER HAD TO CHANGE users:{user_email} to serviceAccount:{user_email}
     user_cmd = textwrap.dedent(f"""\
         {GCLOUD} projects get-iam-policy {project_number} \\
             --flatten="bindings[].members" \\
-            --filter="bindings.members=user:{user_email}" \\
+            --filter="bindings.members=serviceAccount:{user_email}" \\
             --format="value(bindings.role)"
         """)
     
@@ -932,22 +933,18 @@ def deploy_frontend(stage, debug=False):
   cmds = [
       # CloudShell node version is too old for Angular, let's update it.
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm install 22.10.0
+          \. "$HOME/.nvm/nvm.sh" && nvm install 22.10.0
           """),
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm use 22.10.0 \\
+          \. "$HOME/.nvm/nvm.sh" && nvm use 22.10.0 \\
           && npm install -g npm@latest
           """),
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm use 22.10.0 \\
+          \. "$HOME/.nvm/nvm.sh" && nvm use 22.10.0 \\
           && npm install
           """),
       textwrap.dedent("""\
-          source /usr/local/nvm/nvm.sh \\
-          && nvm use 22.10.0 \\
+          \. "$HOME/.nvm/nvm.sh" && nvm use 22.10.0 \\
           && npm run build -- -c production
           """),
   ]
@@ -1076,6 +1073,8 @@ def _download_cloud_sql_proxy(stage, debug=False):
       cmd = f'curl -L {url} -o {cloud_sql_proxy_path}'
       shared.execute_command('Downloading Cloud SQL proxy', cmd, debug=debug)
     os.environ['CLOUD_SQL_PROXY'] = cloud_sql_proxy_path
+  chmod_cmd = f'chmod +x {cloud_sql_proxy_path}'
+  shared.execute_command('Allowing execution of Cloud SQL proxy', chmod_cmd, debug=debug)
 
 
 def _start_cloud_sql_proxy(stage, debug=False):
@@ -1085,13 +1084,14 @@ def _start_cloud_sql_proxy(stage, debug=False):
   cmds = [
       (f'mkdir -p {cloudsql_dir}'.format(), False),
       ('echo "CLOUD_SQL_PROXY=$CLOUD_SQL_PROXY"', False),
+      # ('chmod +x $CLOUD_SQL_PROXY'),
       (
           f' $CLOUD_SQL_PROXY -projects={project_id}'
           f' -instances={db_instance_conn_name}'
           f' -dir={cloudsql_dir} 2>/dev/null &',
           True,
       ),
-      # ('sleep 5', False), # Wait for cloud_sql_proxy to start.
+      ('sleep 10', False), # Wait for cloud_sql_proxy to start.
   ]
   total = len(cmds)
   for i, (cmd, force_std_out) in enumerate(cmds):
